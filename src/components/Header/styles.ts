@@ -1,0 +1,21 @@
+import styled from "styled-components";
+
+export const Wrapper = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 36px 150px;
+
+    > img {
+        margin-right: 26px;
+    }
+
+    > h1 {
+        font-size: 32pt;
+        font-family: Roboto;
+        font-weight: 700;
+    }
+`;
+
+export const GreenText = styled.h1`
+    color: var(--logo-green);
+`;
