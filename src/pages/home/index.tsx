@@ -1,15 +1,17 @@
-import { ButtonGreen } from "../../components/ButtonGreen";
-import { ButtonRed } from "../../components/ButtonRed";
-import { ButtonWithIcon } from "../../components/ButtonWithIcon";
-import { ButtonWithoutIcon } from "../../components/ButtonWithoutIcon";
-import { Container } from "../../components/Container";
-import { Header } from "../../components/Header";
-import { InputDefault } from "../../components/InputDefault";
-import { InputSelect } from "../../components/InputSelect";
+import {
+  ButtonGreen,
+  ButtonRed,
+  ButtonWithIcon,
+  ButtonWithoutIcon,
+  Container,
+  Header,
+  InputDefault,
+  InputSelect,
+} from "../../components";
 import logo from "../../images/logo.svg";
 
 export function Home() {
-  const options = ["Opção 1", "Opção 2", "Opção 3", "Opção 4"]
+  const options = ["Opção 1", "Opção 2", "Opção 3", "Opção 4"];
   return (
     <Container>
       <Header />
@@ -27,10 +29,10 @@ export function Home() {
       <br />
       <ButtonGreen>teste</ButtonGreen>
       <br />
-      <InputDefault placeholder="Email" width={"1000px"}/>
+      <InputDefault placeholder="Email" width={"1000px"} />
       <br />
       <br />
-      <InputDefault placeholder="Senha" type="password"/>
+      <InputDefault placeholder="Senha" type="password" />
       <br />
       <br />
       <InputSelect optionTitle="Selecione a cidade" options={options} />
