@@ -43,4 +43,6 @@ h6 {
 
 button:hover{
   cursor: pointer;
+  opacity: .9;
+  transition: .3s;
 }
