@@ -1,6 +1,7 @@
 import {
   ButtonGreen,
   ButtonRed,
+  ButtonRedirection,
   ButtonWithIcon,
   ButtonWithoutIcon,
   Container,
@@ -36,6 +37,12 @@ export function Home() {
       <br />
       <br />
       <InputSelect optionTitle="Selecione a cidade" options={options} />
+      <br />
+      <br />
+      <ButtonRedirection redirectionType={"email"} url="#"/>
+      <br />
+      <br />
+      <ButtonRedirection redirectionType={"whatsapp"} url="#"/>
     </Container>
   );
 }

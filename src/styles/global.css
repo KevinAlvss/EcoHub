@@ -40,3 +40,7 @@ h6 {
   color: var(--title-color);
   font-family: Ubuntu;
 }
+
+button:hover{
+  cursor: pointer;
+}
