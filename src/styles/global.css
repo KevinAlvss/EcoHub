@@ -1,17 +1,17 @@
 :root {
-    --primary-color: #836FFF;
-    --secondary-color: #5B4EB1;
-    --title-color: #322153;
-    --text-color: #6C6C80;
-    --suport-text-color: #A0A0B2;
-    --logo-green: #34CB79;
-    --opaque-primary-color: #836FFF20;
-    --red: #EA4335;
-    --white: #fff;
+  --primary-color: #836fff;
+  --secondary-color: #5b4eb1;
+  --title-color: #322153;
+  --text-color: #6c6c80;
+  --suport-text-color: #a0a0b2;
+  --logo-green: #34cb79;
+  --opaque-primary-color: #836fff20;
+  --red: #ea4335;
+  --white: #fff;
 
-    --button-height: 65px;
-    --input-height: 65px;
-  }
+  --button-height: 65px;
+  --input-height: 65px;
+}
 
 * {
   margin: 0;
@@ -41,8 +41,8 @@ h6 {
   font-family: Ubuntu;
 }
 
-button:hover{
+button:hover {
   cursor: pointer;
-  opacity: .9;
-  transition: .3s;
+  opacity: 0.9;
+  transition: 0.3s;
 }
