@@ -1,13 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Home } from "./pages/home";
+import "./styles/global.css";
+import { Home, SearchEcoHub } from "./pages";
 import { Index } from "./pages/index";
-import './styles/global.css';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<SearchEcoHub />} />
         <Route path="/inicio" element={<Index />}/>
       </Routes>
     </BrowserRouter>

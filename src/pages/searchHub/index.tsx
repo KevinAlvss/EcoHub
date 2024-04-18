@@ -1,0 +1,27 @@
+import {
+  ButtonWithIcon,
+  Container,
+  Header,
+  InputSelect,
+} from "../../components";
+import { InputContainer, PageWrapper, TextContainer } from "./styles";
+
+export function SearchEcoHub() {
+  return (
+    <Container>
+      <Header />
+      <PageWrapper>
+        <InputContainer>
+          <h2>Ache um ponto de coleta</h2>
+          <InputSelect optionTitle="Selecione o estado" options={["a", "b"]} />
+          <InputSelect optionTitle="Selecione a cidade" options={["a", "b"]} />
+          <ButtonWithIcon img="pesquisar"> Pesquisar </ButtonWithIcon>
+        </InputContainer>
+        <TextContainer>
+          <h1>Próximo a você</h1>
+          <p>Encontre pontos de coleta perto de você de forma eficiente</p>
+        </TextContainer>
+      </PageWrapper>
+    </Container>
+  );
+}
