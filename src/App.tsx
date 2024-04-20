@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./styles/global.css";
-import { Home, SearchEcoHub } from "./pages";
+import { Home, SearchEcoHub, ExploreMap } from "./pages";
 
 function App() {
   return (
@@ -8,6 +8,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<SearchEcoHub />} />
+        <Route path="/view-hubs" element={<ExploreMap />} />
       </Routes>
     </BrowserRouter>
   );
