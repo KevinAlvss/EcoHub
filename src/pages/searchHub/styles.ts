@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import bubble from "../../images/bubble-background-1.svg";
 
 export const TextContainer = styled.div`
   display: flex;
@@ -31,4 +32,8 @@ export const PageWrapper = styled.div`
   justify-content: space-between;
 
   padding: 0 150px;
+
+  background-image: url(${bubble});
+  background-repeat: no-repeat;
+  background-position: right bottom;
 `;
