@@ -5,6 +5,7 @@ import {
   InputSelect,
 } from "../../components";
 import { InputContainer, PageWrapper, TextContainer } from "./styles";
+import arrowright from "../../images/arrow-right.svg";
 
 export function SearchEcoHub() {
   return (
@@ -15,7 +16,7 @@ export function SearchEcoHub() {
           <h2>Ache um ponto de coleta</h2>
           <InputSelect optionTitle="Selecione o estado" options={["a", "b"]} />
           <InputSelect optionTitle="Selecione a cidade" options={["a", "b"]} />
-          <ButtonWithIcon img="pesquisar"> Pesquisar </ButtonWithIcon>
+          <ButtonWithIcon img={arrowright}> Pesquisar </ButtonWithIcon>
         </InputContainer>
         <TextContainer>
           <h1>Próximo a você</h1>

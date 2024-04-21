@@ -1,0 +1,97 @@
+import { useState } from "react";
+import { ButtonGreen, Container, Header } from "../../components";
+import {
+  GoogleMap,
+  InfoWindowF,
+  MarkerF,
+  useLoadScript,
+} from "@react-google-maps/api";
+import { ButtonsContainer, ComponentsContainer, MapContainer } from "./styles";
+
+const markers = [
+  {
+    id: 1,
+    name: "Qobustan",
+    position: { lat: 40.0709493, lng: 49.3694411 },
+  },
+  {
+    id: 2,
+    name: "Sumqayit",
+    position: { lat: 40.5788843, lng: 49.5485073 },
+  },
+  {
+    id: 3,
+    name: "Baku",
+    position: { lat: 40.3947365, lng: 49.6898045 },
+  },
+];
+
+export function ExploreMap() {
+  return (
+    <Container>
+      <Header />
+      <ComponentsContainer>
+        <MapContainer>
+            <Map />
+        </MapContainer>
+        <ButtonsContainer>
+          <h1>Bem vindo.</h1>
+          <p>Encontre no mapa um ponto de coleta</p>
+          <ButtonGreen />
+        </ButtonsContainer>
+      </ComponentsContainer>
+    </Container>
+  );
+}
+
+function Map() {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
+  });
+
+  const [activeMarker, setActiveMarker] = useState(0);
+
+  const handleActiveMarker = (marker: number) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
+
+  return (
+    <>
+      {isLoaded ? (
+        <GoogleMap
+          center={{ lat: 40.3947365, lng: 49.6898045 }}
+          zoom={10}
+          onClick={() => setActiveMarker(0)}
+          mapContainerStyle={{
+            width: "100%",
+            height: "100%",
+            borderRadius: "8px",
+          }}
+        >
+          {markers.map(({ id, name, position }) => (
+            <MarkerF
+              key={id}
+              position={position}
+              onClick={() => handleActiveMarker(id)}
+              icon={{
+                url: "https://t4.ftcdn.net/jpg/02/85/33/21/360_F_285332150_qyJdRevcRDaqVluZrUp8ee4H2KezU9CA.jpg",
+                scaledSize: new google.maps.Size(50, 50),
+              }}
+            >
+              {activeMarker === id ? (
+                <InfoWindowF onCloseClick={() => setActiveMarker(0)}>
+                  <div>
+                    <p>{name}</p>
+                  </div>
+                </InfoWindowF>
+              ) : null}
+            </MarkerF>
+          ))}
+        </GoogleMap>
+      ) : null}
+    </>
+  );
+}
