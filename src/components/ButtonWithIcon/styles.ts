@@ -11,7 +11,6 @@ export const DefaultButton = styled.button<ButtonWithoutIconProps>`
   border-radius: 8px;
   font-size: 16pt;
   width: ${(props) => (props.width ? props.width : "300px")};
-  text-transform: capitalize;
   display: flex;
   align-items: center;
   height: var(--button-height);
