@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import bubble from "../../images/bubble-background-2.svg";
 
 export const Page = styled.div`
   display: flex;
@@ -17,6 +18,10 @@ export const RightSide = styled.div`
   display: flex;
   width: 50vw;
   flex-direction: column;
+
+  background-image: url(${bubble});
+  background-repeat: no-repeat;
+  background-position: bottom right;
 `;
 
 export const TextContainer = styled.div`

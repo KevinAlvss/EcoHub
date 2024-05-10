@@ -2,7 +2,6 @@ import { ButtonWithIcon, Container, Header } from "../../components";
 import location from "../../images/location.svg";
 import people from "../../images/people.svg";
 import login from "../../images/login-icon.svg";
-import background from "../../images/Background.svg";
 import {
   Page,
   LeftSide,
@@ -37,7 +36,6 @@ export function LandingPage() {
         </LeftSide>
         <RightSide>
           <ImgPerson src={people}></ImgPerson>
-          <BackgroundPessoas src={background}></BackgroundPessoas>
         </RightSide>
       </Page>
     </Container>
