@@ -16,7 +16,7 @@ export function Home() {
   return (
     <Container>
       <Header />
-      <ButtonWithIcon img={logo}> teste </ButtonWithIcon>
+      <ButtonWithIcon width={"1000px"} img={logo}> teste </ButtonWithIcon>
       <br />
       <ButtonWithoutIcon width="1000px"> teste </ButtonWithoutIcon>
       <br />

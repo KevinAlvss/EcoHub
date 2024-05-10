@@ -1,4 +1,6 @@
 export { Home } from "../pages/home/index"
 export { SearchEcoHub } from "../pages/searchHub/index"
 export { ExploreMap } from "../pages/exploreMap/index"
-export { LandingPage } from "../pages/LandingPage/index"
+export { LandingPage } from "./landingPage/index"
+export { Login } from "./login/index"
+export { Register } from "./register/index"

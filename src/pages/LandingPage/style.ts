@@ -1,37 +1,51 @@
 import styled from "styled-components";
 
 export const Page = styled.div`
-    display: flex;
-    padding-top: 20vh;
-`
+  display: flex;
+  padding-top: 20vh;
+  flex: 1;
+`;
+
 export const LeftSide = styled.div`
-    display: flex;
-    width: 50vw;
-    flex-direction: column;
-    padding-left: 150px;
-`
+  display: flex;
+  width: 50vw;
+  flex-direction: column;
+  padding-left: 150px;
+`;
+
 export const RightSide = styled.div`
-    display: flex;
-    width: 50vw;
-    flex-direction: column;
-`
+  display: flex;
+  width: 50vw;
+  flex-direction: column;
+`;
+
 export const TextContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 3vh;
-    margin-bottom: 5vh;
-`
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+  margin-bottom: 5vh;
+  
+  > h1 {
+    font-size: 54px;
+  }
+  > p {
+    font-size: 24px;
+  }
+`;
+
 export const ButtonContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 3vh;
-    margin-bottom: 5vh;
-`
-export const ImgPessoas = styled.img`
-    height: 60vh;
-    z-index: 2;
-`
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+  margin-bottom: 5vh;
+`;
+
+export const ImgPerson = styled.img`
+  height: 60vh;
+  z-index: 2;
+`;
+
 export const BackgroundPessoas = styled.img`
-    position: absolute;
-    z-index: 1;
-`
+  position: absolute;
+  z-index: 1;
+`;
