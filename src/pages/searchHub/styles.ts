@@ -23,6 +23,10 @@ export const InputContainer = styled.div`
   > h2 {
     font-size: 40px;
   }
+
+  > a {
+    text-decoration: none;
+  }
 `;
 
 export const PageWrapper = styled.div`

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ButtonWithIcon, Container, Header } from "../../components";
 import location from "../../images/location.svg";
 import people from "../../images/people.svg";
@@ -9,7 +10,6 @@ import {
   TextContainer,
   ButtonContainer,
   ImgPerson,
-  BackgroundPessoas,
 } from "./style";
 
 export function LandingPage() {
@@ -26,12 +26,16 @@ export function LandingPage() {
             </p>
           </TextContainer>
           <ButtonContainer>
-            <ButtonWithIcon img={location} width="450px">
-              Encontrar ponto de coleta
-            </ButtonWithIcon>
-            <ButtonWithIcon img={login} width="450px">
-              Cadastre um ponto de coleta
-            </ButtonWithIcon>
+            <Link to={"/search"}>
+              <ButtonWithIcon img={location} width="450px">
+                Encontrar ponto de coleta
+              </ButtonWithIcon>
+            </Link>
+            <Link to={"/login"}>
+              <ButtonWithIcon img={login} width="450px">
+                Cadastre um ponto de coleta
+              </ButtonWithIcon>
+            </Link>
           </ButtonContainer>
         </LeftSide>
         <RightSide>

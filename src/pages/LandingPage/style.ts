@@ -43,14 +43,13 @@ export const ButtonContainer = styled.div`
   flex-direction: column;
   gap: 3vh;
   margin-bottom: 5vh;
+
+  > a {
+    text-decoration: none;
+  }
 `;
 
 export const ImgPerson = styled.img`
   height: 60vh;
   z-index: 2;
-`;
-
-export const BackgroundPessoas = styled.img`
-  position: absolute;
-  z-index: 1;
 `;

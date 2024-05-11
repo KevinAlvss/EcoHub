@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   ButtonWithIcon,
   Container,
@@ -16,7 +17,9 @@ export function SearchEcoHub() {
           <h2>Ache um ponto de coleta</h2>
           <InputSelect optionTitle="Selecione o estado" options={["a", "b"]} />
           <InputSelect optionTitle="Selecione a cidade" options={["a", "b"]} />
-          <ButtonWithIcon img={arrowright}> Pesquisar </ButtonWithIcon>
+          <Link to={"/view-hubs"}>
+            <ButtonWithIcon img={arrowright}> Pesquisar </ButtonWithIcon>
+          </Link>
         </InputContainer>
         <TextContainer>
           <h1>Próximo a você</h1>
