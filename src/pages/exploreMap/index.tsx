@@ -7,7 +7,8 @@ import {
   useLoadScript,
 } from "@react-google-maps/api";
 import { ButtonWrapper, ButtonsContainer, ComponentsContainer, MapContainer } from "./styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import hubImage from "../../images/hub-example.png";
 
 const markers = [
   {
@@ -54,6 +55,8 @@ export function ExploreMap() {
 }
 
 function Map() {
+  const navigate = useNavigate();
+  
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
   });
@@ -65,6 +68,7 @@ function Map() {
       return;
     }
     setActiveMarker(marker);
+    navigate('/inspect', { replace: true })
   };
 
   return (
@@ -86,7 +90,7 @@ function Map() {
               position={position}
               onClick={() => handleActiveMarker(id)}
               icon={{
-                url: "https://t4.ftcdn.net/jpg/02/85/33/21/360_F_285332150_qyJdRevcRDaqVluZrUp8ee4H2KezU9CA.jpg",
+                url: hubImage,
                 scaledSize: new google.maps.Size(50, 50),
               }}
             >
