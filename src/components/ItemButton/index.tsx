@@ -5,14 +5,21 @@ import organics from "../../images/organics.svg";
 import paper from "../../images/paper.svg";
 import oil from "../../images/kitchen-oil.svg";
 import { DefaultButton } from "./styles";
+import { useState } from "react";
 
 export interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   itemType: "lamp" | "batery" | "eletronic" | "organic" | "paper" | "oil";
 }
 
 export function ItemButton(props: Props) {
+  const [selected, setSelected] = useState(false);
+
+  function handleOnClick() {
+    setSelected(!selected);
+  }
+
   return (
-    <DefaultButton {...props}>
+    <DefaultButton {...props} selected={selected} onClick={() => handleOnClick()}>
       {MapTypeAndRender(props)}
     </DefaultButton>
   );

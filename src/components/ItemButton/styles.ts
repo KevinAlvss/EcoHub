@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
-export const DefaultButton = styled.button`
-  background-color: var(--opaque-primary-color);
+type ItemButtonProps = {
+  selected: boolean
+}
+
+export const DefaultButton = styled.button<ItemButtonProps>`
+  background-color: ${props => props.selected ? '#836fff80' : 'var(--opaque-primary-color)'};
   color: var(--black);
   border: none;
   border-radius: 8px;
@@ -18,7 +22,6 @@ export const DefaultButton = styled.button`
   }
 
   &:hover{
-    background: var(--background-color);
-    background: linear-gradient(180deg, var(--background-color) 0%, var(--primary-color) 100%);
+    background: linear-gradient(180deg, var(--opaque-primary-color) 0%, var(--primary-color) 100%);
   }
 `;
