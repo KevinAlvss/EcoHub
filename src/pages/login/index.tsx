@@ -22,7 +22,9 @@ export function Login() {
               Não tem uma conta? <Link to="/register"> Crie uma</Link>
             </p>
           </InputContainer>
-          <ButtonWithIcon img={arrow} width="100%"> Entrar </ButtonWithIcon>
+          <Link to={"/my-hubs"}>
+            <ButtonWithIcon img={arrow} width="100%"> Entrar </ButtonWithIcon>
+          </Link>
         </LoginContainer>
       </Page>
     </Container>

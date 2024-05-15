@@ -13,6 +13,7 @@ export const Content = styled.div`
 export const Hub = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   
   min-width: 500px;
   width: calc(33% - 16px);
@@ -20,9 +21,13 @@ export const Hub = styled.div`
 
   padding: 32px;
 
-  gap: 18px;
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
 
-  > img {
+  > div img {
     width: 100%;
     margin: 0 auto;
   }

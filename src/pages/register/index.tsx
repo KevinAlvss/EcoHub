@@ -26,9 +26,11 @@ export function Register() {
               Já tem uma conta? <Link to="/login">Entre aqui</Link>
             </p>
           </InputContainer>
-          <ButtonWithIcon img={arrow} width="100%">
-            Cadastre-se
-          </ButtonWithIcon>
+          <Link to={"/my-hubs"}>
+            <ButtonWithIcon img={arrow} width="100%">
+              Cadastre-se
+            </ButtonWithIcon>
+          </Link>
         </LoginContainer>
       </Page>
     </Container>

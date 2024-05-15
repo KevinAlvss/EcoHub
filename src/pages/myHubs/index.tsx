@@ -54,14 +54,16 @@ function RenderHubs() {
   return hubs.map((hub) => {
     return (
       <Hub>
-        <img src={hub.image} alt="nomeDoHubAqui" />
-        <h1>{hub.name}</h1>
-        <p>{hub.materials}</p>
         <div>
-          <strong>Endereço</strong>
-          <p>
-            {hub.address.street} - {hub.address.number}
-          </p>
+          <img src={hub.image} alt="nomeDoHubAqui" />
+          <h1>{hub.name}</h1>
+          <p>{hub.materials}</p>
+          <div>
+            <strong>Endereço</strong>
+            <p>
+              {hub.address.street} - {hub.address.number}
+            </p>
+          </div>
         </div>
         <ButtonWithoutIcon>Editar Ponto</ButtonWithoutIcon>
       </Hub>

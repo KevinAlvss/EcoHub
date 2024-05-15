@@ -18,6 +18,10 @@ export const LoginContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   min-width: 20vw;
+
+  > a {
+    text-decoration: none;
+  }
 `;
 
 export const InputContainer = styled.div`
