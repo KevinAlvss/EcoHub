@@ -11,9 +11,11 @@ import {
 import hubImage from "../../images/hub-example.png";
 import whatsapp from "../../images/whatsapp.svg";
 import email from "../../images/email.svg";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export function InspectHub() {
+  const { hubId } = useParams();
+
   return (
     <Container>
       <Header />
@@ -22,7 +24,7 @@ export function InspectHub() {
           <img src={hubImage} alt="nomeDoHubAqui" />
         </ImageContainer>
         <InfoContainer>
-          <h1>Pilhas Edu</h1>
+          <h1>Pilhas Edu {hubId}</h1>
           <Materials>
             Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias
           </Materials>

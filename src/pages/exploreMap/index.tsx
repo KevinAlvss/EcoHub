@@ -68,7 +68,7 @@ function Map() {
       return;
     }
     setActiveMarker(marker);
-    navigate('/inspect', { replace: true })
+    navigate(`/view-hubs/inspect/${marker}`, { replace: true })
   };
 
   return (

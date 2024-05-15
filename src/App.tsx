@@ -19,7 +19,7 @@ function App() {
         <Route path="/view-hubs" element={<ExploreMap />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/inspect" element={<InspectHub />} />
+        <Route path="/view-hubs/inspect/:hubId" element={<InspectHub />} />
         <Route path="/components" element={<Home />} />
       </Routes>
     </BrowserRouter>
