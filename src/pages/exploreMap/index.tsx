@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { ButtonGreen, Container, Header } from "../../components";
+import { ItemButton, Container, Header } from "../../components";
 import {
   GoogleMap,
   InfoWindowF,
   MarkerF,
   useLoadScript,
 } from "@react-google-maps/api";
-import { ButtonsContainer, ComponentsContainer, MapContainer } from "./styles";
+import { ButtonWrapper, ButtonsContainer, ComponentsContainer, MapContainer } from "./styles";
+import { Link } from "react-router-dom";
 
 const markers = [
   {
@@ -37,7 +38,15 @@ export function ExploreMap() {
         <ButtonsContainer>
           <h1>Bem vindo.</h1>
           <p>Encontre no mapa um ponto de coleta</p>
-          <ButtonGreen />
+          <ButtonWrapper>
+            <ItemButton itemType="lamp"/>
+            <ItemButton itemType="batery"/>
+            <ItemButton itemType="eletronic"/>
+            <ItemButton itemType="organic"/>
+            <ItemButton itemType="paper"/>
+            <ItemButton itemType="oil"/>
+          </ButtonWrapper>
+          <Link to={"/search"}>Voltar</Link>
         </ButtonsContainer>
       </ComponentsContainer>
     </Container>

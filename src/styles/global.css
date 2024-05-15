@@ -4,10 +4,12 @@
   --title-color: #322153;
   --text-color: #6c6c80;
   --suport-text-color: #a0a0b2;
+  --background-color: #f0f0f5;
   --logo-green: #34cb79;
   --opaque-primary-color: #836fff20;
   --red: #ea4335;
   --white: #fff;
+  --black: #000;
 
   --button-height: 65px;
   --input-height: 65px;
@@ -20,7 +22,7 @@
 }
 
 body {
-  background: #f0f0f5;
+  background: var(--background-color);
   -webkit-font-smoothing: antialiased;
   color: var(--text-color);
 }

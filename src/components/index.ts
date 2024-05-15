@@ -7,3 +7,4 @@ export { Header } from "./Header";
 export { InputDefault } from "./InputDefault";
 export { InputSelect } from "./InputSelect";
 export { ButtonRedirection } from "./ButtonRedirection";
+export { ItemButton } from "./ItemButton";

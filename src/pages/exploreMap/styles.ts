@@ -24,3 +24,10 @@ export const ButtonsContainer = styled.div`
         font-size: 16pt;
     }
 `;
+
+export const ButtonWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 32px 0;
+`;
