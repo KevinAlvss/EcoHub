@@ -1,10 +1,6 @@
 import styled from "styled-components";
 
-type ButtonGreenProps = {
-  width?: string;
-};
-
-export const DefaultButton = styled.button<ButtonGreenProps>`
+export const DefaultButton = styled.button`
   background-color: var(--opaque-primary-color);
   color: var(--black);
   border: none;
