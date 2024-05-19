@@ -9,6 +9,7 @@ import {
   Register,
   InspectHub,
   MyHubs,
+  CreateHub,
 } from "./pages";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/view-hubs/inspect/:hubId" element={<InspectHub />} />
         <Route path="/my-hubs" element={<MyHubs />} />
+        <Route path="/create-hub" element={<CreateHub />} />
         <Route path="/components" element={<Home />} />
       </Routes>
     </BrowserRouter>

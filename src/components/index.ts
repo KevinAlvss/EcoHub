@@ -8,3 +8,4 @@ export { InputDefault } from "./InputDefault";
 export { InputSelect } from "./InputSelect";
 export { ButtonRedirection } from "./ButtonRedirection";
 export { ItemButton } from "./ItemButton";
+export { Dropzone } from "./Dropzone";

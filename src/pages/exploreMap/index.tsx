@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ItemButton, Container, Header } from "../../components";
 import {
   GoogleMap,
@@ -56,6 +56,21 @@ export function ExploreMap() {
 
 function Map() {
   const navigate = useNavigate();
+
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    0,
+    0,
+  ]);
+
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+  
+        setInitialPosition([latitude, longitude]);
+      });
+  },[])
+
   
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
@@ -75,8 +90,8 @@ function Map() {
     <>
       {isLoaded ? (
         <GoogleMap
-          center={{ lat: 40.3947365, lng: 49.6898045 }}
-          zoom={10}
+          center={{ lat: initialPosition[0], lng: initialPosition[1] }}
+          zoom={18}
           onClick={() => setActiveMarker(0)}
           mapContainerStyle={{
             width: "100%",
