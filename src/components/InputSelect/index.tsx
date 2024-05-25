@@ -13,7 +13,7 @@ export function InputSelect(
   optionProps: OptionProps,
 ) {
   return (
-    <DefaultSelect {...selectProps}>
+    <DefaultSelect {...selectProps} defaultValue={selectProps.optionTitle}>
       <DefaultOption {...optionProps} disabled selected>{selectProps.optionTitle}</DefaultOption>
       {selectProps.options.map((option) => (
         <>
