@@ -5,7 +5,7 @@ import logo from "../../images/logo.svg";
 import { FiArrowLeft } from "react-icons/fi";
 import "./styles.css";
 
-import { Dropzone } from "../../components";
+import { Dropzone, ItemButton } from "../../components";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 
 interface Item {
@@ -26,7 +26,7 @@ export function CreateHub() {
   const [selectedUf, setSelectedUf] = useState("0");
   const [selectedCity, setSelectedCity] = useState("0");
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  
+
   const [selectedFile, setSelectedFile] = useState<File>();
 
   useEffect(() => {
@@ -130,20 +130,17 @@ export function CreateHub() {
             <span>Selecione um ou mais itens abaixo</span>
           </legend>
 
-          <ul className="items-grid">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className={selectedItems.includes(item.id) ? "selected" : ""}
-              >
-                <img src={item.image_url} alt={item.title} />
-                <span>{item.title}</span>
-              </li>
-            ))}
-          </ul>
+            <div id="items-button-wrapper">
+              <ItemButton itemType="lamp"/>
+              <ItemButton itemType="batery"/>
+              <ItemButton itemType="eletronic"/>
+              <ItemButton itemType="organic"/>
+              <ItemButton itemType="paper"/>
+              <ItemButton itemType="oil"/>
+            </div>
         </fieldset>
 
-        <button type="submit">Cadastrar ponto de coleta</button>
+        <button id="form-button" type="submit">Cadastrar ponto de coleta</button>
       </form>
     </div>
   );

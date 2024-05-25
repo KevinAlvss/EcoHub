@@ -145,7 +145,7 @@
   margin-bottom: 24px;
 }
 
-#page-create-point form button {
+#form-button {
   width: 260px;
   height: 56px;
   background: var(--primary-color);
@@ -160,9 +160,6 @@
   cursor: pointer;
 }
 
-#page-create-point form button:hover {
-  background: #2fb86e;
-}
 
 .items-grid {
   display: grid;
@@ -200,6 +197,19 @@
 .items-grid li.selected {
   background: #e1faec;
   border: 2px solid #34cb79;
+}
+
+#items-button-wrapper {
+  display: flex;
+  justify-content: center;
+  justify-content: space-between;
+  gap: 2%;
+  flex-wrap: wrap;
+}
+
+#items-button-wrapper button {
+    width: 31%;
+    margin-bottom: 3%;
 }
 
 .map-container {

@@ -19,7 +19,7 @@ export function ItemButton(props: Props) {
   }
 
   return (
-    <DefaultButton {...props} selected={selected} onClick={() => handleOnClick()}>
+    <DefaultButton type="button" {...props} selected={selected} onClick={() => handleOnClick()}>
       {MapTypeAndRender(props)}
     </DefaultButton>
   );
