@@ -10,6 +10,7 @@ import {
   InspectHub,
   MyHubs,
   CreateHub,
+  UpdateHub,
 } from "./pages";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/view-hubs/inspect/:hubId" element={<InspectHub />} />
         <Route path="/my-hubs" element={<MyHubs />} />
         <Route path="/create-hub" element={<CreateHub />} />
+        <Route path="/edit-hub/:hubId" element={<UpdateHub />} />
         <Route path="/components" element={<Home />} />
       </Routes>
     </BrowserRouter>

@@ -1,10 +1,11 @@
 import { ButtonGreen, ButtonWithoutIcon, Container, Header } from "../../components";
 import { ButtonContainer, Content, EmptyHubContainer, Hub } from "./styles";
 import hubImage from "../../images/hub-example.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const hubs: any[] = [
   {
+    id: 1,
     name: "Pilhas Edu",
     materials: "Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias",
     address: {
@@ -14,6 +15,7 @@ const hubs: any[] = [
     image: hubImage,
   },
   {
+    id: 2,
     name: "Pilhas Edu",
     materials: "Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias",
     address: {
@@ -23,6 +25,7 @@ const hubs: any[] = [
     image: hubImage,
   },
   {
+    id: 3,
     name: "Pilhas Edu",
     materials: "Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias",
     address: {
@@ -59,6 +62,12 @@ function EmptyHubs() {
 }
 
 function RenderHubs() {
+  const navigate = useNavigate();
+
+  function handleClick(id: string){
+    navigate(`/edit-hub/${id}`, { replace: true })
+  }
+
   return hubs.map((hub) => {
     return (
       <Hub>
@@ -73,7 +82,7 @@ function RenderHubs() {
             </p>
           </div>
         </div>
-        <ButtonWithoutIcon>Editar Ponto</ButtonWithoutIcon>
+        <ButtonWithoutIcon onClick={() => handleClick(hub.id)}>Editar Ponto</ButtonWithoutIcon>
       </Hub>
     );
   });
