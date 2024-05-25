@@ -1,6 +1,7 @@
-import { ButtonWithoutIcon, Container, Header } from "../../components";
-import { Content, EmptyHubContainer, Hub } from "./styles";
+import { ButtonGreen, ButtonWithoutIcon, Container, Header } from "../../components";
+import { ButtonContainer, Content, EmptyHubContainer, Hub } from "./styles";
 import hubImage from "../../images/hub-example.png";
+import { Link } from "react-router-dom";
 
 const hubs: any[] = [
   {
@@ -36,6 +37,13 @@ export function MyHubs() {
   return (
     <Container>
       <Header />
+      <ButtonContainer>
+        <ButtonGreen>
+          <Link to="/create-hub">
+            Adicionar Novo Ponto
+          </Link>
+        </ButtonGreen>
+      </ButtonContainer>
       <Content>{hubs.length === 0 ? EmptyHubs() : RenderHubs()}</Content>
     </Container>
   );

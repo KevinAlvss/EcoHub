@@ -43,3 +43,13 @@ export const EmptyHubContainer = styled.div`
     margin-bottom: 32px;
   }
 `;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  padding: 0 150px;
+
+  > button a {
+    text-decoration: none;
+  }
+`;
