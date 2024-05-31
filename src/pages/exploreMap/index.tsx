@@ -9,6 +9,7 @@ import {
 import { ButtonWrapper, ButtonsContainer, ComponentsContainer, MapContainer } from "./styles";
 import { Link, useNavigate } from "react-router-dom";
 import hubImage from "../../images/hub-example.png";
+import { useLocation } from "../../contexts/locationContext";
 
 const markers = [
   {
@@ -28,13 +29,20 @@ const markers = [
   },
 ];
 
+interface loc {
+  lat: number | undefined,
+  lng: number | undefined
+}
+
 export function ExploreMap() {
+  const { location } = useLocation();
+
   return (
     <Container>
       <Header />
       <ComponentsContainer>
         <MapContainer>
-            <Map />
+            <Map lat={location?.lat} lng={location?.long}/>
         </MapContainer>
         <ButtonsContainer>
           <h1>Bem vindo.</h1>
@@ -54,29 +62,33 @@ export function ExploreMap() {
   );
 }
 
-function Map() {
+function Map(location : loc) {
   const navigate = useNavigate();
-
+  
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
     0,
     0,
   ]);
 
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-  
-        setInitialPosition([latitude, longitude]);
-      });
-  },[])
-
-  
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
   });
 
   const [activeMarker, setActiveMarker] = useState(0);
+
+  useEffect(() => {
+    if(location.lat !== undefined && location.lng !== undefined){
+      setInitialPosition([location.lat, location.lng]);
+
+      return;
+    }
+    
+    navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+  
+        setInitialPosition([latitude, longitude]);
+      });
+  },[location.lat, location.lng])
 
   const handleActiveMarker = (marker: number) => {
     if (marker === activeMarker) {
@@ -91,7 +103,7 @@ function Map() {
       {isLoaded ? (
         <GoogleMap
           center={{ lat: initialPosition[0], lng: initialPosition[1] }}
-          zoom={18}
+          zoom={12}
           onClick={() => setActiveMarker(0)}
           mapContainerStyle={{
             width: "100%",

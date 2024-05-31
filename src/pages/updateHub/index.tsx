@@ -5,13 +5,23 @@ import logo from "../../images/logo.svg";
 import { FiArrowLeft } from "react-icons/fi";
 import "./styles.css";
 
-import { ButtonRed, Dropzone, ItemButton } from "../../components";
+import { ButtonRed, Dropzone, InputSelect, ItemButton } from "../../components";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
+import axios from 'axios';
 
 interface Item {
   id: number;
   title: string;
   image_url: string;
+}
+
+interface IBGEUFResponse {
+  sigla: string;
+}
+
+interface IBGECityResponse {
+  nome: string;
+  id: string;
 }
 
 export function UpdateHub() {
@@ -20,14 +30,6 @@ export function UpdateHub() {
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
     0, 0,
   ]);
-
-  const [ufs, setUfs] = useState<string[]>([]);
-  const [cities, setCities] = useState<string[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-
-  const [selectedUf, setSelectedUf] = useState("0");
-  const [selectedCity, setSelectedCity] = useState("0");
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
   const [selectedFile, setSelectedFile] = useState<File>();
 
@@ -38,6 +40,35 @@ export function UpdateHub() {
       setInitialPosition([latitude, longitude]);
     });
   }, []);
+
+
+  const [ufs, setUfs] = useState<string[]>([]);
+  const [cities, setCities] = useState<IBGECityResponse[]>([]);
+  const [selectedCityName, setSelectedCityName] = useState('');
+  const [selectedUf, setSelectedUf] = useState('');
+
+  useEffect(() => {
+    axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
+      const ufInitials = response.data.map(uf => uf.sigla).sort();
+
+      setUfs(ufInitials);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (selectedUf === '') {
+      return;
+    }
+
+    axios
+      .get<IBGECityResponse[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
+      .then(response => {
+        const cities = response.data.map(city => city);
+
+        setCities(cities);
+      });
+  }, [selectedUf]);
+
 
   return (
     <div id="page-create-point">
@@ -97,30 +128,14 @@ export function UpdateHub() {
 
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
-              <select name="uf" id="uf" value={selectedUf}>
-                <option value="0">Selecione uma UF</option>
-
-                {ufs.map((uf) => (
-                  <option key={uf} value={uf}>
-                    {uf}
-                  </option>
-                ))}
-              </select>
+              <InputSelect optionTitle="Selecione o estado" options={ufs}  onInput={(e) => setSelectedUf((e.target as HTMLInputElement).value)}/>
             </div>
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select name="city" id="city" value={selectedCity}>
-                <option value="0">Selecione uma cidade</option>
-
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
+              <InputSelect optionTitle="Selecione a cidade" options={cities.map(c => c.nome)} onInput={(e) => setSelectedCityName((e.target as HTMLInputElement).value)}/>
             </div>
           </div>
         </fieldset>
@@ -141,7 +156,7 @@ export function UpdateHub() {
             </div>
         </fieldset>
 
-        <button id="form-button" type="submit">Cadastrar ponto de coleta</button>
+        <button id="form-button" type="button">Cadastrar ponto de coleta</button>
         <ButtonRed id="delete-button">Deletar ponto de coleta</ButtonRed>
       </form>
     </div>

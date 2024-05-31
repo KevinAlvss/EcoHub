@@ -9,6 +9,7 @@ import {
 import { InputContainer, PageWrapper, TextContainer } from "./styles";
 import arrowright from "../../images/arrow-right.svg";
 import axios from 'axios';
+import { useLocation } from "../../contexts/locationContext";
 
 interface IBGEUFResponse {
   sigla: string;
@@ -16,12 +17,21 @@ interface IBGEUFResponse {
 
 interface IBGECityResponse {
   nome: string;
+  id: string;
 }
 
+interface IBGELocationResponse {
+  latitude: number;
+  longitude: number;
+}
+
+
 export function SearchEcoHub() {
+  const { setLocation } = useLocation();
+
   const [ufs, setUfs] = useState<string[]>([]);
-  const [cities, setCities] = useState<string[]>([]);
-  const [selectedCity, setSelectedCity] = useState('');
+  const [cities, setCities] = useState<IBGECityResponse[]>([]);
+  const [selectedCityName, setSelectedCityName] = useState('');
   const [selectedUf, setSelectedUf] = useState('');
 
   useEffect(() => {
@@ -40,11 +50,28 @@ export function SearchEcoHub() {
     axios
       .get<IBGECityResponse[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
       .then(response => {
-        const cityNames = response.data.map(city => city.nome);
+        const cities = response.data.map(city => city);
 
-        setCities(cityNames);
+        setCities(cities);
       });
   }, [selectedUf]);
+
+  useEffect(() => {
+    if(selectedCityName === ''){
+      return;
+    }
+
+    const city = cities.filter((city) => city.nome === selectedCityName)[0];
+
+    axios
+    .get<IBGELocationResponse[]>(`https://servicodados.ibge.gov.br/api/v1/bdg/municipio/${city.id}/estacoes`)
+    .then(response => {
+      setLocation({
+        lat: response.data[0].latitude,
+        long: response.data[0].longitude
+      });
+    });
+  }, [cities, selectedCityName, setLocation])
 
   return (
     <Container>
@@ -53,7 +80,7 @@ export function SearchEcoHub() {
         <InputContainer>
           <h2>Ache um ponto de coleta</h2>
           <InputSelect optionTitle="Selecione o estado" options={ufs}  onInput={(e) => setSelectedUf((e.target as HTMLInputElement).value)}/>
-          <InputSelect optionTitle="Selecione a cidade" options={cities} onInput={(e) => setSelectedCity((e.target as HTMLInputElement).value)}/>
+          <InputSelect optionTitle="Selecione a cidade" options={cities.map(c => c.nome)} onInput={(e) => setSelectedCityName((e.target as HTMLInputElement).value)}/>
           <Link to={"/view-hubs"}>
             <ButtonWithIcon img={arrowright}> Pesquisar </ButtonWithIcon>
           </Link>

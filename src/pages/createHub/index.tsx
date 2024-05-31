@@ -140,7 +140,7 @@ export function CreateHub() {
             </div>
         </fieldset>
 
-        <button id="form-button" type="submit">Cadastrar ponto de coleta</button>
+        <button id="form-button" type="button">Cadastrar ponto de coleta</button>
       </form>
     </div>
   );
