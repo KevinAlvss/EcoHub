@@ -7,7 +7,7 @@ type AuthContextProviderProps = {
 
 type AuthContextData = {
     token: string | undefined;
-    login: () => void;
+    login: (email: string, password: string) => void;
     logOut: () => void;
     checkLogin: () => void;
 }
@@ -19,8 +19,8 @@ export function AuthContextProvider({children}: AuthContextProviderProps){
 
     const [token, setToken] = useState(window.sessionStorage.getItem("token") || "");
 
-    const login = () => {
-        setToken("token do kevinho");
+    const login = (email: string, password: string) => {
+        setToken(`${email} - ${password}`);
         window.sessionStorage.removeItem("token");
         window.sessionStorage.setItem("token", token);
     }
