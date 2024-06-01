@@ -2,6 +2,7 @@ import { ButtonGreen, ButtonWithoutIcon, Container, Header } from "../../compone
 import { ButtonContainer, Content, EmptyHubContainer, Hub } from "./styles";
 import hubImage from "../../images/hub-example.png";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/authContext";
 
 const hubs: any[] = [
   {
@@ -37,13 +38,18 @@ const hubs: any[] = [
 ];
 
 export function MyHubs() {
+  const { token, checkLogin } = useAuth();
+
+
+  checkLogin();
+
   return (
     <Container>
       <Header />
       <ButtonContainer>
         <ButtonGreen>
           <Link to="/create-hub">
-            Adicionar Novo Ponto
+            {token}
           </Link>
         </ButtonGreen>
       </ButtonContainer>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ButtonWithIcon,
   Container,
@@ -7,8 +7,18 @@ import {
 } from "../../components";
 import arrow from "../../images/arrow-right.svg";
 import { Page, LoginContainer, InputContainer } from "./style";
+import { useAuth } from "../../contexts/authContext";
 
 export function Login() {
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogin(){
+    login()
+    navigate("/my-hubs")
+  }
+
   return (
     <Container>
       <Header />
@@ -22,9 +32,7 @@ export function Login() {
               Não tem uma conta? <Link to="/register"> Crie uma</Link>
             </p>
           </InputContainer>
-          <Link to={"/my-hubs"}>
-            <ButtonWithIcon img={arrow} width="100%"> Entrar </ButtonWithIcon>
-          </Link>
+          <ButtonWithIcon img={arrow} width="100%" onClick={() => handleLogin()}> Entrar </ButtonWithIcon>
         </LoginContainer>
       </Page>
     </Container>
