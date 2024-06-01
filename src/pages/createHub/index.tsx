@@ -42,7 +42,7 @@ export function CreateHub() {
       <header>
         <img src={logo} alt="Ecoleta" />
 
-        <Link to="/">
+        <Link to="/my-hubs">
           <FiArrowLeft />
           Voltar para home
         </Link>
