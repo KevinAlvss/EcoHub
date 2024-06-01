@@ -28,4 +28,14 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  > input {
+    background-color: var(--white);
+    border: none;
+    height: var(--input-height);
+    border-radius: 8px;
+    padding: 0 40px;
+    font-size: 12pt;
+    width: "600px";
+  }
 `;

@@ -17,6 +17,8 @@ import {
   LocationContextProvider,
   MaterialContextProvider,
 } from "./contexts";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -42,6 +44,7 @@ function App() {
           </MaterialContextProvider>
         </LocationContextProvider>
       </AuthContextProvider>
+      <ToastContainer />
     </BrowserRouter>
   );
 }
