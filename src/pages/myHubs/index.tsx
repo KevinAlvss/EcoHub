@@ -1,5 +1,5 @@
 import { ButtonGreen, ButtonWithoutIcon, Container, Header } from "../../components";
-import { ButtonContainer, Content, EmptyHubContainer, Hub } from "./styles";
+import { ButtonContainer, Content, EmptyHubContainer, Hub, Wrapper } from "./styles";
 import hubImage from "../../images/hub-example.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
@@ -38,22 +38,23 @@ const hubs: any[] = [
 ];
 
 export function MyHubs() {
-  const { token, checkLogin } = useAuth();
-
+  const { checkLogin } = useAuth();
 
   checkLogin();
 
   return (
     <Container>
       <Header />
-      <ButtonContainer>
-        <ButtonGreen>
-          <Link to="/create-hub">
-            {token}
-          </Link>
-        </ButtonGreen>
-      </ButtonContainer>
-      <Content>{hubs.length === 0 ? EmptyHubs() : RenderHubs()}</Content>
+      <Wrapper>
+        <ButtonContainer>
+          <ButtonGreen>
+            <Link to="/create-hub">
+              Criar hub
+            </Link>
+          </ButtonGreen>
+        </ButtonContainer>
+        <Content>{hubs.length === 0 ? EmptyHubs() : RenderHubs()}</Content>
+      </Wrapper>
     </Container>
   );
 }
