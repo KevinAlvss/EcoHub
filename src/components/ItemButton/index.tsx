@@ -6,6 +6,8 @@ import paper from "../../images/paper.svg";
 import oil from "../../images/kitchen-oil.svg";
 import { DefaultButton } from "./styles";
 import { useState } from "react";
+import { useMaterial } from "../../contexts";
+import { MaterialType } from "../../contexts/materialContext";
 
 export interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   itemType: "lamp" | "batery" | "eletronic" | "organic" | "paper" | "oil";
@@ -13,9 +15,28 @@ export interface Props extends React.HTMLAttributes<HTMLButtonElement> {
 
 export function ItemButton(props: Props) {
   const [selected, setSelected] = useState(false);
+  const { handleMaterialType } = useMaterial();
 
   function handleOnClick() {
     setSelected(!selected);
+    handleMaterialType(toContextMaterialType(props.itemType)!)
+  }
+
+  function toContextMaterialType(itemType : string){
+    switch (itemType) {
+      case "batery":
+        return MaterialType.batery;
+      case "eletronic":
+        return MaterialType.eletronic;
+      case "lamp":
+        return MaterialType.lamp;
+      case "oil":
+        return MaterialType.oil;
+      case "organic":
+        return MaterialType.organic;
+      case "paper":
+        return MaterialType.paper;
+    }
   }
 
   return (

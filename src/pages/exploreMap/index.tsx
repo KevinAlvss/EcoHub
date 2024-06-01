@@ -10,6 +10,7 @@ import { ButtonWrapper, ButtonsContainer, ComponentsContainer, MapContainer } fr
 import { Link, useNavigate } from "react-router-dom";
 import hubImage from "../../images/hub-example.png";
 import { useLocation } from "../../contexts/locationContext";
+import { useMaterial } from "../../contexts";
 
 const markers = [
   {
@@ -36,6 +37,11 @@ interface loc {
 
 export function ExploreMap() {
   const { location } = useLocation();
+  const { materialTypes } = useMaterial();
+
+  useEffect(() => {
+    console.log("mudou")
+  }, [materialTypes])
 
   return (
     <Container>
