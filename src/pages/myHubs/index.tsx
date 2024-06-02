@@ -3,6 +3,7 @@ import { ButtonContainer, Content, EmptyHubContainer, Hub, Wrapper } from "./sty
 import hubImage from "../../images/hub-example.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
+import { useEffect } from "react";
 
 const hubs: any[] = [
   {
@@ -40,7 +41,9 @@ const hubs: any[] = [
 export function MyHubs() {
   const { checkLogin } = useAuth();
 
-  checkLogin();
+  useEffect(() => {
+    checkLogin()
+  },[checkLogin])  
 
   return (
     <Container>
@@ -77,7 +80,7 @@ function RenderHubs() {
 
   return hubs.map((hub) => {
     return (
-      <Hub>
+      <Hub key={hub.name}>
         <div>
           <img src={hub.image} alt="nomeDoHubAqui" />
           <h1>{hub.name}</h1>

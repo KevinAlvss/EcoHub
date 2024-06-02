@@ -12,6 +12,8 @@ import hubImage from "../../images/hub-example.png";
 import whatsapp from "../../images/whatsapp.svg";
 import email from "../../images/email.svg";
 import { Link, useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/authContext";
+import { useEffect } from "react";
 
 export function InspectHub() {
   const { hubId } = useParams();

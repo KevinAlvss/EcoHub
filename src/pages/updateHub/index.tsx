@@ -8,6 +8,7 @@ import "./styles.css";
 import { ButtonRed, Dropzone, InputSelect, ItemButton } from "../../components";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 import axios from 'axios';
+import { useAuth } from "../../contexts/authContext";
 
 interface Item {
   id: number;
@@ -26,6 +27,12 @@ interface IBGECityResponse {
 
 export function UpdateHub() {
   const { hubId } = useParams();
+
+  const { checkLogin } = useAuth();
+
+  useEffect(() => {
+    checkLogin()
+  },[checkLogin]) 
 
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
     0, 0,

@@ -32,7 +32,8 @@ export function AuthContextProvider({children}: AuthContextProviderProps){
       };
 
     const checkLogin = () => {
-        if(!token){
+        console.log(token)
+        if(!token || token === ''){
             navigate("/login");
         }
     };
