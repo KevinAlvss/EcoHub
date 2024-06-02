@@ -80,7 +80,7 @@ function RenderHubs() {
 
   return hubs.map((hub) => {
     return (
-      <Hub key={hub.name}>
+      <Hub key={hub.id}>
         <div>
           <img src={hub.image} alt="nomeDoHubAqui" />
           <h1>{hub.name}</h1>
