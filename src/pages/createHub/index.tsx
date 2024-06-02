@@ -33,13 +33,8 @@ export function CreateHub() {
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [number, setNumber] = useState("");
-  const [city, setCity] = useState("");
-  const [uf, setUf] = useState("");
 
   function handleCreate(){
-    // login(email, password)
-
-    // navigate("/my-hubs")
   }
 
   useEffect(() => {
@@ -109,7 +104,7 @@ export function CreateHub() {
 
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
-              <select name="uf" id="uf" value={selectedUf}>
+              <select name="uf" id="uf" value={selectedUf} onChange={(e) => setSelectedUf(e.target.value)}>
                 <option value="0">Selecione uma UF</option>
 
                 {ufs.map((uf) => (
@@ -124,7 +119,7 @@ export function CreateHub() {
           <div className="field-group">
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select name="city" id="city" value={selectedCity}>
+              <select name="city" id="city" value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
                 <option value="0">Selecione uma cidade</option>
 
                 {cities.map((city) => (
@@ -153,7 +148,7 @@ export function CreateHub() {
           </div>
         </fieldset>
 
-        <button id="form-button" type="button">
+        <button id="form-button" type="button" onClick={() => handleCreate()}>
           Cadastrar ponto de coleta
         </button>
       </form>

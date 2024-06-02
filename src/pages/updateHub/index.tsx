@@ -53,6 +53,18 @@ export function UpdateHub() {
   const [cities, setCities] = useState<IBGECityResponse[]>([]);
   const [selectedCityName, setSelectedCityName] = useState('');
   const [selectedUf, setSelectedUf] = useState('');
+  
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [number, setNumber] = useState("");
+
+  function handleUpdate(){
+
+  }
+  function handleDelete(): void {
+
+    }
 
   useEffect(() => {
     axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
@@ -75,7 +87,6 @@ export function UpdateHub() {
         setCities(cities);
       });
   }, [selectedUf]);
-
 
   return (
     <div id="page-create-point">
@@ -102,17 +113,17 @@ export function UpdateHub() {
 
           <div className="field">
             <label htmlFor="name">Nome da entidade</label>
-            <input type="text" name="name" id="name" />
+            <input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="email">E-mail</label>
-              <input type="email" name="email" id="email" />
+              <input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="field">
               <label htmlFor="whatsapp">Whatsapp</label>
-              <input type="text" name="whatsapp" id="whatsapp" />
+              <input type="text" name="whatsapp" id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
             </div>
           </div>
         </fieldset>
@@ -130,7 +141,7 @@ export function UpdateHub() {
           <div className="field-group">
             <div className="field">
               <label htmlFor="numero">Numero</label>
-              <input type="text" name="numero" id="numero" />
+              <input type="text" name="numero" id="numero" value={number} onChange={(e) => setNumber(e.target.value)} />
             </div>
 
             <div className="field">
@@ -163,8 +174,8 @@ export function UpdateHub() {
             </div>
         </fieldset>
 
-        <button id="form-button" type="button">Cadastrar ponto de coleta</button>
-        <ButtonRed id="delete-button">Deletar ponto de coleta</ButtonRed>
+        <button id="form-button" type="button" onClick={() => handleUpdate()}>Cadastrar ponto de coleta</button>
+        <ButtonRed id="delete-button" onClick={() => handleDelete()}>Deletar ponto de coleta</ButtonRed>
       </form>
     </div>
   );
