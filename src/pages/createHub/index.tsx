@@ -29,6 +29,19 @@ export function CreateHub() {
 
   const [selectedFile, setSelectedFile] = useState<File>();
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [number, setNumber] = useState("");
+  const [city, setCity] = useState("");
+  const [uf, setUf] = useState("");
+
+  function handleCreate(){
+    // login(email, password)
+
+    // navigate("/my-hubs")
+  }
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
@@ -63,17 +76,17 @@ export function CreateHub() {
 
           <div className="field">
             <label htmlFor="name">Nome da entidade</label>
-            <input type="text" name="name" id="name" />
+            <input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="email">E-mail</label>
-              <input type="email" name="email" id="email" />
+              <input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="field">
               <label htmlFor="whatsapp">Whatsapp</label>
-              <input type="text" name="whatsapp" id="whatsapp" />
+              <input type="text" name="whatsapp" id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
             </div>
           </div>
         </fieldset>
@@ -91,7 +104,7 @@ export function CreateHub() {
           <div className="field-group">
             <div className="field">
               <label htmlFor="numero">Numero</label>
-              <input type="text" name="numero" id="numero" />
+              <input type="text" name="numero" id="numero" value={number} onChange={(e) => setNumber(e.target.value)}/>
             </div>
 
             <div className="field">
@@ -130,17 +143,19 @@ export function CreateHub() {
             <span>Selecione um ou mais itens abaixo</span>
           </legend>
 
-            <div id="items-button-wrapper">
-              <ItemButton itemType="lamp"/>
-              <ItemButton itemType="batery"/>
-              <ItemButton itemType="eletronic"/>
-              <ItemButton itemType="organic"/>
-              <ItemButton itemType="paper"/>
-              <ItemButton itemType="oil"/>
-            </div>
+          <div id="items-button-wrapper">
+            <ItemButton itemType="lamp" />
+            <ItemButton itemType="batery" />
+            <ItemButton itemType="eletronic" />
+            <ItemButton itemType="organic" />
+            <ItemButton itemType="paper" />
+            <ItemButton itemType="oil" />
+          </div>
         </fieldset>
 
-        <button id="form-button" type="button">Cadastrar ponto de coleta</button>
+        <button id="form-button" type="button">
+          Cadastrar ponto de coleta
+        </button>
       </form>
     </div>
   );
