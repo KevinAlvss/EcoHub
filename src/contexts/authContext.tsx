@@ -1,6 +1,7 @@
 import { createContext, useState, ReactNode, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../services/auth/AuthService";
+import { toast } from "react-toastify";
 
 type AuthContextProviderProps = {
   children: ReactNode;
@@ -22,14 +23,19 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [token, setToken] = useState(window.sessionStorage.getItem("token") || "");
   
   const login = async (email: string, password: string) => {
-    const r = await api.login({
-      email: "mari@teste.com",
-      senha: "mariri"
+    const responseToken = await api.login({
+      email: email,
+      senha: password
+    })
+    .catch(e => {
+      toast.error("Algum erro ocorreu tente mais tarde")
+
+      return;
     });
   
-    setToken(r);
+    setToken(responseToken!);
 
-    window.sessionStorage.setItem("token", r);
+    window.sessionStorage.setItem("token", responseToken!);
   };
 
   const logOut = () => {

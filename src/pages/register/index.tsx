@@ -10,6 +10,9 @@ import { Page, LoginContainer, InputContainer } from "./style";
 import { useState } from "react";
 import InputMask from 'react-input-mask';
 import { toast } from "react-toastify";
+import { UserService } from "../../services/user/UserService";
+
+const api = new UserService();
 
 export function Register() {
   const navigate = useNavigate();
@@ -22,13 +25,44 @@ export function Register() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
   
-  function handleRegister(){
+  async function handleRegister(){
+    if(!password || !email){
+      toast.error("Forneça uma entrada válida")
+    }
+
+    if(!nome){
+      toast.error("Insira seu nome")
+    }
+
+    if(!cpf){
+      toast.error("Insira seu cpf")
+    }
+
+    if(!birthDate){
+      toast.error("Insira sua data de nascimento")
+    }
+
     if(password !== passwordConfirmation){
       toast.error("As senhas não correspondem");
       return;
     }
 
-    navigate("/my-hubs")
+    const [day, month, year] = birthDate.split('/');
+
+    api.addNewUser({
+      cpf: cpf,
+      dataNascimento: `${year}-${month}-${day}`,
+      email: email,
+      nome: nome,
+      senha: password
+    })
+    .then(() => {
+      navigate("/my-hubs")
+    })
+    .catch(e => {
+      toast.error("Algum erro ocorreum tente mais tarde")
+    })
+
   }
 
   return (
@@ -48,7 +82,7 @@ export function Register() {
               Já tem uma conta? <Link to="/login">Entre aqui</Link>
             </p>
           </InputContainer>
-          <ButtonWithIcon img={arrow} width="100%" onClick={() => handleRegister()}>
+          <ButtonWithIcon img={arrow} width="100%" onClick={async () => await handleRegister()}>
             Cadastre-se
           </ButtonWithIcon>
         </LoginContainer>

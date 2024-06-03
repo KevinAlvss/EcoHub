@@ -11,44 +11,40 @@ import { Link, useNavigate } from "react-router-dom";
 import hubImage from "../../images/hub-example.png";
 import { useLocation } from "../../contexts/locationContext";
 import { useMaterial } from "../../contexts";
+import { HubService } from "../../services/hub/HubService";
+import { GetHub } from "../../services/models/hub/HubModel";
 
-const markers = [
-  {
-    id: 1,
-    name: "Qobustan",
-    position: { lat: 40.0709493, lng: 49.3694411 },
-  },
-  {
-    id: 2,
-    name: "Sumqayit",
-    position: { lat: 40.5788843, lng: 49.5485073 },
-  },
-  {
-    id: 3,
-    name: "Baku",
-    position: { lat: 40.3947365, lng: 49.6898045 },
-  },
-];
 
-interface loc {
+interface MapProps {
   lat: number | undefined,
-  lng: number | undefined
+  lng: number | undefined,
+  hubs: GetHub[],
 }
+
+const api = new HubService();
 
 export function ExploreMap() {
   const { location } = useLocation();
   const { materialTypes } = useMaterial();
 
+  const [hubs, setHubs] = useState<GetHub[]>([]);
+
   useEffect(() => {
-    console.log("mudou")
-  }, [materialTypes])
+    async function searchHubs(){
+      const hubs = await api.getAllHubs();
+  
+      setHubs(hubs);
+    }
+
+    searchHubs();
+  }, [])
 
   return (
     <Container>
       <Header />
       <ComponentsContainer>
         <MapContainer>
-            <Map lat={location?.lat} lng={location?.long}/>
+            <Map lat={location?.lat} lng={location?.long} hubs={hubs}/>
         </MapContainer>
         <ButtonsContainer>
           <h1>Bem vindo.</h1>
@@ -68,7 +64,7 @@ export function ExploreMap() {
   );
 }
 
-function Map(location : loc) {
+function Map(props : MapProps) {
   const navigate = useNavigate();
   
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
@@ -80,11 +76,11 @@ function Map(location : loc) {
     googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
   });
 
-  const [activeMarker, setActiveMarker] = useState(0);
+  const [activeMarker, setActiveMarker] = useState('');
 
   useEffect(() => {
-    if(location.lat !== undefined && location.lng !== undefined){
-      setInitialPosition([location.lat, location.lng]);
+    if(props.lat !== undefined && props.lng !== undefined){
+      setInitialPosition([props.lat, props.lng]);
 
       return;
     }
@@ -94,9 +90,9 @@ function Map(location : loc) {
   
         setInitialPosition([latitude, longitude]);
       });
-  },[location.lat, location.lng])
+  },[props.lat, props.lng])
 
-  const handleActiveMarker = (marker: number) => {
+  const handleActiveMarker = (marker: string) => {
     if (marker === activeMarker) {
       return;
     }
@@ -110,27 +106,27 @@ function Map(location : loc) {
         <GoogleMap
           center={{ lat: initialPosition[0], lng: initialPosition[1] }}
           zoom={12}
-          onClick={() => setActiveMarker(0)}
+          onClick={() => setActiveMarker('')}
           mapContainerStyle={{
             width: "100%",
             height: "100%",
             borderRadius: "8px",
-          }}
+          }} 
         >
-          {markers.map(({ id, name, position }) => (
+          {props.hubs.map(hub  => (
             <MarkerF
-              key={id}
-              position={position}
-              onClick={() => handleActiveMarker(id)}
+              key={hub.id}
+              position={{ lat: 40.3947365, lng: 49.6898045 }}
+              onClick={() => handleActiveMarker(hub.id)}
               icon={{
                 url: hubImage,
                 scaledSize: new google.maps.Size(50, 50),
               }}
             >
-              {activeMarker === id ? (
-                <InfoWindowF onCloseClick={() => setActiveMarker(0)}>
+              {activeMarker === hub.id ? (
+                <InfoWindowF onCloseClick={() => setActiveMarker('')}>
                   <div>
-                    <p>{name}</p>
+                    <p>{hub.nome}</p>
                   </div>
                 </InfoWindowF>
               ) : null}
