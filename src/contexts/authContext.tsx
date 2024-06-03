@@ -1,5 +1,6 @@
 import { createContext, useState, ReactNode, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "../services/auth/AuthService";
 
 type AuthContextProviderProps = {
   children: ReactNode;
@@ -13,18 +14,22 @@ type AuthContextData = {
 };
 
 export const AuthContext = createContext({} as AuthContextData);
+const api = new AuthService();
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const navigate = useNavigate();
 
   const [token, setToken] = useState(window.sessionStorage.getItem("token") || "");
   
-  const login = (email: string, password: string) => {
-    const buildToken = `${email} + ${password}`;
+  const login = async (email: string, password: string) => {
+    const r = await api.login({
+      email: "mari@teste.com",
+      senha: "mariri"
+    });
+  
+    setToken(r);
 
-    setToken(buildToken);
-
-    window.sessionStorage.setItem("token", buildToken);
+    window.sessionStorage.setItem("token", r);
   };
 
   const logOut = () => {
