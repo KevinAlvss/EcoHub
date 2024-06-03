@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import logo from "../../images/logo.svg";
 import { FiArrowLeft } from "react-icons/fi";
@@ -7,8 +7,11 @@ import "./styles.css";
 
 import { ButtonRed, Dropzone, InputSelect, ItemButton } from "../../components";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
-import axios from 'axios';
+import axios from "axios";
 import { useAuth } from "../../contexts/authContext";
+import { HubService } from "../../services/hub/HubService";
+
+const api = new HubService();
 
 interface Item {
   id: number;
@@ -26,13 +29,14 @@ interface IBGECityResponse {
 }
 
 export function UpdateHub() {
+  const navigate = useNavigate();
   const { hubId } = useParams();
 
   const { checkLogin } = useAuth();
 
   useEffect(() => {
-    checkLogin()
-  },[checkLogin]) 
+    checkLogin();
+  }, [checkLogin]);
 
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
     0, 0,
@@ -48,41 +52,48 @@ export function UpdateHub() {
     });
   }, []);
 
-
   const [ufs, setUfs] = useState<string[]>([]);
   const [cities, setCities] = useState<IBGECityResponse[]>([]);
-  const [selectedCityName, setSelectedCityName] = useState('');
-  const [selectedUf, setSelectedUf] = useState('');
-  
+  const [selectedCityName, setSelectedCityName] = useState("");
+  const [selectedUf, setSelectedUf] = useState("");
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [number, setNumber] = useState("");
 
-  function handleUpdate(){
-
-  }
+  function handleUpdate() {}
   function handleDelete(): void {
+    api.deleteExistingHub(String(hubId));
 
-    }
+    navigate("/my-hubs");
+
+    window.location.reload();
+  }
 
   useEffect(() => {
-    axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
-      const ufInitials = response.data.map(uf => uf.sigla).sort();
+    axios
+      .get<IBGEUFResponse[]>(
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
+      )
+      .then((response) => {
+        const ufInitials = response.data.map((uf) => uf.sigla).sort();
 
-      setUfs(ufInitials);
-    });
+        setUfs(ufInitials);
+      });
   }, []);
 
   useEffect(() => {
-    if (selectedUf === '') {
+    if (selectedUf === "") {
       return;
     }
 
     axios
-      .get<IBGECityResponse[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
-      .then(response => {
-        const cities = response.data.map(city => city);
+      .get<IBGECityResponse[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`
+      )
+      .then((response) => {
+        const cities = response.data.map((city) => city);
 
         setCities(cities);
       });
@@ -100,9 +111,7 @@ export function UpdateHub() {
       </header>
 
       <form autoComplete="off">
-        <h1>
-          [Nome aqui - ID {hubId}]
-        </h1>
+        <h1>[Nome aqui - ID {hubId}]</h1>
 
         <Dropzone onFileUploaded={setSelectedFile} />
 
@@ -113,17 +122,35 @@ export function UpdateHub() {
 
           <div className="field">
             <label htmlFor="name">Nome da entidade</label>
-            <input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="email">E-mail</label>
-              <input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="field">
               <label htmlFor="whatsapp">Whatsapp</label>
-              <input type="text" name="whatsapp" id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
+              <input
+                type="text"
+                name="whatsapp"
+                id="whatsapp"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
+              />
             </div>
           </div>
         </fieldset>
@@ -141,19 +168,37 @@ export function UpdateHub() {
           <div className="field-group">
             <div className="field">
               <label htmlFor="numero">Numero</label>
-              <input type="text" name="numero" id="numero" value={number} onChange={(e) => setNumber(e.target.value)} />
+              <input
+                type="text"
+                name="numero"
+                id="numero"
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
+              />
             </div>
 
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
-              <InputSelect optionTitle="Selecione o estado" options={ufs}  onInput={(e) => setSelectedUf((e.target as HTMLInputElement).value)}/>
+              <InputSelect
+                optionTitle="Selecione o estado"
+                options={ufs}
+                onInput={(e) =>
+                  setSelectedUf((e.target as HTMLInputElement).value)
+                }
+              />
             </div>
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <InputSelect optionTitle="Selecione a cidade" options={cities.map(c => c.nome)} onInput={(e) => setSelectedCityName((e.target as HTMLInputElement).value)}/>
+              <InputSelect
+                optionTitle="Selecione a cidade"
+                options={cities.map((c) => c.nome)}
+                onInput={(e) =>
+                  setSelectedCityName((e.target as HTMLInputElement).value)
+                }
+              />
             </div>
           </div>
         </fieldset>
@@ -164,18 +209,22 @@ export function UpdateHub() {
             <span>Selecione um ou mais itens abaixo</span>
           </legend>
 
-            <div id="items-button-wrapper">
-              <ItemButton itemType="lamp"/>
-              <ItemButton itemType="batery"/>
-              <ItemButton itemType="eletronic"/>
-              <ItemButton itemType="organic"/>
-              <ItemButton itemType="paper"/>
-              <ItemButton itemType="oil"/>
-            </div>
+          <div id="items-button-wrapper">
+            <ItemButton itemType="lamp" />
+            <ItemButton itemType="batery" />
+            <ItemButton itemType="eletronic" />
+            <ItemButton itemType="organic" />
+            <ItemButton itemType="paper" />
+            <ItemButton itemType="oil" />
+          </div>
         </fieldset>
 
-        <button id="form-button" type="button" onClick={() => handleUpdate()}>Cadastrar ponto de coleta</button>
-        <ButtonRed id="delete-button" onClick={() => handleDelete()}>Deletar ponto de coleta</ButtonRed>
+        <button id="form-button" type="button" onClick={() => handleUpdate()}>
+          Cadastrar ponto de coleta
+        </button>
+        <ButtonRed id="delete-button" onClick={() => handleDelete()}>
+          Deletar ponto de coleta
+        </ButtonRed>
       </form>
     </div>
   );
