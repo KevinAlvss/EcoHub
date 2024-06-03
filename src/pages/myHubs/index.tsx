@@ -1,49 +1,38 @@
 import { ButtonGreen, ButtonWithoutIcon, Container, Header } from "../../components";
 import { ButtonContainer, Content, EmptyHubContainer, Hub, Wrapper } from "./styles";
-import hubImage from "../../images/hub-example.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { HubService } from "../../services/hub/HubService";
+import { GetHub } from "../../services/models/hub/HubModel";
 
-const hubs: any[] = [
-  {
-    id: 1,
-    name: "Pilhas Edu",
-    materials: "Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias",
-    address: {
-      street: "Rua do Senac",
-      number: "91",
-    },
-    image: hubImage,
-  },
-  {
-    id: 2,
-    name: "Pilhas Edu",
-    materials: "Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias",
-    address: {
-      street: "Rua do Senac",
-      number: "92",
-    },
-    image: hubImage,
-  },
-  {
-    id: 3,
-    name: "Pilhas Edu",
-    materials: "Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias",
-    address: {
-      street: "Rua do Senac",
-      number: "93",
-    },
-    image: hubImage,
-  },
-];
+const api = new HubService();
 
 export function MyHubs() {
-  const { checkLogin } = useAuth();
+  const { checkLogin, userId } = useAuth();
+  const [hubs, setHubs] = useState<GetHub[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    checkLogin()
-  },[checkLogin])  
+    checkLogin();
+  }, [checkLogin]);
+
+  useEffect(() => {
+    async function fetchHubs(userId: string | undefined) {
+      if (userId === undefined) {
+        return;
+      }
+
+      try {
+        const response = await api.getHubsByUser(userId);
+        setHubs(response);
+      } catch (error) {
+        console.error('Failed to fetch hubs:', error);
+      }
+    }
+
+    fetchHubs(userId);
+  }, [userId]);
 
   return (
     <Container>
@@ -56,7 +45,7 @@ export function MyHubs() {
             </Link>
           </ButtonGreen>
         </ButtonContainer>
-        <Content>{hubs.length === 0 ? EmptyHubs() : RenderHubs()}</Content>
+        <Content>{hubs.length === 0 ? <EmptyHubs /> : <RenderHubs hubs={hubs} navigate={navigate} />}</Content>
       </Wrapper>
     </Container>
   );
@@ -71,29 +60,33 @@ function EmptyHubs() {
   );
 }
 
-function RenderHubs() {
-  const navigate = useNavigate();
-
+function RenderHubs({ hubs, navigate }: { hubs: GetHub[], navigate: any }) {
   function handleClick(id: string){
     navigate(`/edit-hub/${id}`, { replace: true })
   }
 
-  return hubs.map((hub) => {
-    return (
-      <Hub key={hub.id}>
-        <div>
-          <img src={hub.image} alt="nomeDoHubAqui" />
-          <h1>{hub.name}</h1>
-          <p>{hub.materials}</p>
-          <div>
-            <strong>Endereço</strong>
-            <p>
-              {hub.address.street} - {hub.address.number}
-            </p>
-          </div>
-        </div>
-        <ButtonWithoutIcon onClick={() => handleClick(hub.id)}>Editar Ponto</ButtonWithoutIcon>
-      </Hub>
-    );
-  });
+  return (
+    <>
+      {hubs.map((hub) => {
+        const formattedMaterial = hub.materiais.map(m => m.nome.toLowerCase()).join(" , ");
+
+        return (
+          <Hub key={hub.id}>
+            <div>
+              <img src={hub.imagem} alt="nomeDoHubAqui" />
+              <h1>{hub.nome}</h1>
+              <p>{formattedMaterial}</p>
+              <div>
+                <strong>Endereço</strong>
+                <p>
+                  {hub.estado} - {hub.cidade}
+                </p>
+              </div>
+            </div>
+            <ButtonWithoutIcon onClick={() => handleClick(hub.id)}>Editar Ponto</ButtonWithoutIcon>
+          </Hub>
+        );
+      })}
+    </>
+  );
 }

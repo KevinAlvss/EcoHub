@@ -12,11 +12,26 @@ import hubImage from "../../images/hub-example.png";
 import whatsapp from "../../images/whatsapp.svg";
 import email from "../../images/email.svg";
 import { Link, useParams } from "react-router-dom";
-import { useAuth } from "../../contexts/authContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { HubService } from "../../services/hub/HubService";
+import { GetHub } from "../../services/models/hub/HubModel";
+
+const api = new HubService();
 
 export function InspectHub() {
   const { hubId } = useParams();
+  const [hub, setHub] = useState<GetHub>()
+
+  useEffect(() => {
+    async function searchHub(){
+      const response = await api.getHubById(hubId!);
+
+      setHub(response);
+    }
+
+    searchHub();
+  }, [hubId])
+
 
   return (
     <Container>
@@ -26,19 +41,30 @@ export function InspectHub() {
           <img src={hubImage} alt="nomeDoHubAqui" />
         </ImageContainer>
         <InfoContainer>
-          <h1>Pilhas Edu {hubId}</h1>
+          <h1>{hub?.nome}</h1>
           <Materials>
-            Resíduos Eletrônicos, Lâmpadas, Pilhas e Baterias
+            {hub?.materiais.map(({nome}) => {
+              const a = nome.toLowerCase()
+              return (
+                <p>{a + " - "}</p>
+              )
+            })}
           </Materials>
 
           <RouteContainer>
             <RouteTitle>Endereço</RouteTitle>
-            <p>Rua do Senac 92</p>
+            <p>{hub?.estado} - {hub?.cidade}</p>
+            <p>Cep: {hub?.cep} - numero: {hub?.numero}</p>
+            <p>{hub?.pontoReferencia}</p>
           </RouteContainer>
 
           <ButtonContainer>
-            <ButtonWithIcon img={whatsapp}>Whatsapp</ButtonWithIcon>
-            <ButtonWithIcon img={email}>E-mail</ButtonWithIcon>
+            <a href={`/https://wa.me/${hub?.numero}`} target="_blank" rel="noreferrer">
+              <ButtonWithIcon img={whatsapp}>Whatsapp</ButtonWithIcon>
+            </a>
+            <a href={`mailto:${hub?.email}`} target="_blank" rel="noreferrer">
+             <ButtonWithIcon img={email}>E-mail</ButtonWithIcon>
+            </a>
           </ButtonContainer>
 
           <Link to="/view-hubs">Voltar</Link>

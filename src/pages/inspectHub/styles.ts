@@ -31,6 +31,8 @@ export const InfoContainer = styled.div`
 export const Materials = styled.p`
   font-size: 16pt;
   color: var(--primary-color);
+  text-transform: capitalize;
+  display: flex;
 `;
 
 export const RouteContainer = styled.div``;
