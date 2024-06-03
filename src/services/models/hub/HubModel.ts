@@ -19,6 +19,8 @@ export interface GetHub {
   numero: string;
   cidade: string;
   estado: string;
+  latitude: string;
+  longitude: string;
   pontoReferencia?: string;
   cep: string;
   usuarioId: string;

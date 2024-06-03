@@ -28,16 +28,34 @@ export function ExploreMap() {
   const { materialTypes } = useMaterial();
 
   const [hubs, setHubs] = useState<GetHub[]>([]);
+  const [hubsResponse, setHubsResponse] = useState<GetHub[]>([]);
 
   useEffect(() => {
     async function searchHubs(){
-      const hubs = await api.getAllHubs();
+      const apiResponseHubs = await api.getAllHubs();
   
-      setHubs(hubs);
+      setHubs(apiResponseHubs);
+      setHubsResponse(apiResponseHubs);
+
+      console.log(apiResponseHubs);
     }
 
     searchHubs();
   }, [])
+
+  useEffect(() => {
+    const filtro = materialTypes.map(m => Number(m) + 1);
+
+    if(filtro.length === 0){
+      setHubs(hubsResponse);
+
+      return;
+    }
+
+    const filteredHubs = hubs.filter(hub => hub.materiais.some(material => filtro.includes(material.id)))
+
+    setHubs(filteredHubs);
+  }, [materialTypes])
 
   return (
     <Container>
@@ -116,7 +134,7 @@ function Map(props : MapProps) {
           {props.hubs.map(hub  => (
             <MarkerF
               key={hub.id}
-              position={{ lat: 40.3947365, lng: 49.6898045 }}
+              position={{ lat: Number(hub.latitude), lng: Number(hub.longitude) }}
               onClick={() => handleActiveMarker(hub.id)}
               icon={{
                 url: hubImage,

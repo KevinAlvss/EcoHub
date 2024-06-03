@@ -14,6 +14,13 @@ export class HubService {
     return response.data;
   }
 
+  async getHubsByUser(userId: string): Promise<GetHub[]> {
+    const response = await api.get<GetHub[]>(
+      `buscarPorUsuario?usuarioId=${userId}`
+    );
+    return response.data;
+  }
+
   async addNewHub(hub: AddOrUpdateHubRequest): Promise<any> {
     const response = await api.post("api/v1/pontoColeta/PontoDeColeta", hub);
     return response.data;

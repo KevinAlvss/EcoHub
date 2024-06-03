@@ -3,4 +3,7 @@ export interface LoginModelRequest {
   senha: string;
 }
 
-export interface LoginModelResponse {}
+export interface LoginModelResponse {
+  token: string;
+  idUsuario: string;
+}
