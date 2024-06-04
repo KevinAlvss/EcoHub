@@ -11,6 +11,7 @@ import {
   MyHubs,
   CreateHub,
   UpdateHub,
+  UseTerms,
 } from "./pages";
 import {
   AuthContextProvider,
@@ -40,6 +41,7 @@ function App() {
               <Route path="/create-hub" element={<CreateHub />} />
               <Route path="/edit-hub/:hubId" element={<UpdateHub />} />
               <Route path="/components" element={<Home />} />
+              <Route path="/use-terms" element={<UseTerms />} />
             </Routes>
           </MaterialContextProvider>
         </LocationContextProvider>

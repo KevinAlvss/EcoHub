@@ -85,6 +85,7 @@ export function Register() {
           <ButtonWithIcon img={arrow} width="100%" onClick={async () => await handleRegister()}>
             Cadastre-se
           </ButtonWithIcon>
+          <Link to='/use-terms'>Termos de uso e privacidade</Link>
         </LoginContainer>
       </Page>
     </Container>

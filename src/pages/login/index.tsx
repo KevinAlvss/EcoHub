@@ -52,6 +52,7 @@ export function Login() {
             </p>
           </InputContainer>
           <ButtonWithIcon img={arrow} width="100%" onClick={() => handleLogin()}> Entrar </ButtonWithIcon>
+          <Link to='/use-terms'>Termos de uso e privacidade</Link>
         </LoginContainer>
       </Page>
     </Container>

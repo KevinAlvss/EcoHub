@@ -22,6 +22,7 @@ export class HubService {
   }
 
   async addNewHub(hub: AddOrUpdateHubRequest): Promise<any> {
+    console.log(hub)
     const response = await api.post("api/v1/pontoColeta/PontoDeColeta", hub);
     return response.data;
   }
