@@ -1,41 +1,124 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../../images/logo.svg";
 import { FiArrowLeft } from "react-icons/fi";
 import "./styles.css";
 
-import { Dropzone, ItemButton } from "../../components";
+import { Dropzone, InputSelect, ItemButton } from "../../components";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 
-interface Item {
-  id: number;
-  title: string;
-  image_url: string;
+import axios from "axios";
+import { useAuth, useMaterial } from "../../contexts";
+import { HubService } from "../../services/hub/HubService";
+import { toast } from "react-toastify";
+
+interface IBGEUFResponse {
+  sigla: string;
 }
 
+interface IBGECityResponse {
+  nome: string;
+  id: string;
+}
+
+const api = new HubService();
+
+let sharedCoordinates = [0, 0];
+
 export function CreateHub() {
+  const { materialTypes } = useMaterial();
+  const { checkLogin, userId } = useAuth();
+  const navigate = useNavigate();
+  
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
     0, 0,
   ]);
 
   const [ufs, setUfs] = useState<string[]>([]);
-  const [cities, setCities] = useState<string[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-
-  const [selectedUf, setSelectedUf] = useState("0");
-  const [selectedCity, setSelectedCity] = useState("0");
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [cities, setCities] = useState<IBGECityResponse[]>([]);
+  const [selectedCityName, setSelectedCityName] = useState("");
+  const [selectedUf, setSelectedUf] = useState("");
 
   const [selectedFile, setSelectedFile] = useState<File>();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
-  const [number, setNumber] = useState("");
 
-  function handleCreate(){
+  async function getBase64(file: any) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        resolve(reader.result)
+      }
+      reader.onerror = reject
+    })
   }
+
+  async function handleCreate(){
+
+  let selectedImageBase64 : any;
+
+  await getBase64(selectedFile)
+    .then(res => {selectedImageBase64 = res})
+    .catch(err => console.log(err))
+
+    const request = {
+      cep : "99999999",
+      cidade : selectedCityName,
+      email : email,
+      estado : selectedUf,
+      idMateriais : materialTypes.map((m) => Number(m) + 1),
+      imagem : selectedImageBase64!.toString(),
+      nome : name,
+      numero : whatsapp,
+      usuarioId : userId!,
+      latitude: sharedCoordinates[0].toString(),
+      longitude: sharedCoordinates[1].toString(),
+    }
+    
+
+    await api.addNewHub(request).then(() => {
+      navigate("/my-hubs", { replace: true });
+    })
+    .catch(() => {
+      toast.error("algum erro ocorreu ao criar seu Hub")
+    })
+  }
+
+  useEffect(() => {
+    checkLogin();
+  }, [checkLogin]);
+
+  useEffect(() => {
+    axios
+      .get<IBGEUFResponse[]>(
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
+      )
+      .then((response) => {
+        const ufInitials = response.data.map((uf) => uf.sigla).sort();
+
+        setUfs(ufInitials);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (selectedUf === "") {
+      return;
+    }
+
+    axios
+      .get<IBGECityResponse[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`
+      )
+      .then((response) => {
+        const cities = response.data.map((city) => city);
+
+        setCities(cities);
+      });
+  }, [selectedUf]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -93,41 +176,30 @@ export function CreateHub() {
           </legend>
 
           <div className="map-container">
-            <Map />
+            <Map latitude={initialPosition[0]} longitude={initialPosition[1]}/>
           </div>
 
           <div className="field-group">
-            <div className="field">
-              <label htmlFor="numero">Numero</label>
-              <input type="text" name="numero" id="numero" value={number} onChange={(e) => setNumber(e.target.value)}/>
-            </div>
-
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
-              <select name="uf" id="uf" value={selectedUf} onChange={(e) => setSelectedUf(e.target.value)}>
-                <option value="0">Selecione uma UF</option>
-
-                {ufs.map((uf) => (
-                  <option key={uf} value={uf}>
-                    {uf}
-                  </option>
-                ))}
-              </select>
+              <InputSelect
+                optionTitle="Selecione o estado"
+                options={ufs}
+                onInput={(e) =>
+                  setSelectedUf((e.target as HTMLInputElement).value)
+                }
+              />
             </div>
-          </div>
 
-          <div className="field-group">
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select name="city" id="city" value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
-                <option value="0">Selecione uma cidade</option>
-
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
+              <InputSelect
+                optionTitle="Selecione a cidade"
+                options={cities.map((c) => c.nome)}
+                onInput={(e) =>
+                  setSelectedCityName((e.target as HTMLInputElement).value)
+                }
+              />
             </div>
           </div>
         </fieldset>
@@ -156,19 +228,7 @@ export function CreateHub() {
   );
 }
 
-function Map() {
-  const [initialPosition, setInitialPosition] = useState<[number, number]>([
-    0, 0,
-  ]);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-
-      setInitialPosition([latitude, longitude]);
-    });
-  }, []);
-
+function Map({ latitude, longitude }: { latitude: number; longitude: number }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
   });
@@ -177,7 +237,7 @@ function Map() {
     <>
       {isLoaded ? (
         <GoogleMap
-          center={{ lat: initialPosition[0], lng: initialPosition[1] }}
+          center={{ lat: latitude, lng: longitude }}
           zoom={17}
           mapContainerStyle={{
             width: "100%",
@@ -186,10 +246,10 @@ function Map() {
           }}
         >
           <MarkerF
-            position={{ lat: initialPosition[0], lng: initialPosition[1] }}
+            position={{ lat: latitude, lng: longitude }}
             draggable={true}
             onDragEnd={(e) =>
-              setInitialPosition([e.latLng!.lat(), e.latLng!.lng()])
+              (sharedCoordinates = [e.latLng!.lat(), e.latLng!.lng()])
             }
           />
         </GoogleMap>
