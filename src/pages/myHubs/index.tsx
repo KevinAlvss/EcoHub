@@ -1,6 +1,6 @@
 import { ButtonGreen, ButtonWithoutIcon, Container, Header } from "../../components";
 import { ButtonContainer, Content, EmptyHubContainer, Hub, Wrapper } from "./styles";
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
 import { useEffect, useState } from "react";
 import { HubService } from "../../services/hub/HubService";
