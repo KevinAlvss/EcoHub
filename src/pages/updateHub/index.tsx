@@ -10,6 +10,9 @@ import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 import axios from "axios";
 import { useAuth } from "../../contexts/authContext";
 import { HubService } from "../../services/hub/HubService";
+import { GetHub } from "../../services/models/hub/HubModel";
+import { useMaterial } from "../../contexts";
+import { toast } from "react-toastify";
 
 const api = new HubService();
 
@@ -28,42 +31,114 @@ interface IBGECityResponse {
   id: string;
 }
 
-export function UpdateHub() {
-  const navigate = useNavigate();
-  const { hubId } = useParams();
+let sharedCoordinates = [0, 0];
 
-  const { checkLogin } = useAuth();
+export function UpdateHub() {
+  const { hubId } = useParams();
+  const { checkLogin, userId } = useAuth();
+  const { materialTypes } = useMaterial();
+  const navigate = useNavigate();
+
+  const [hub, setHub] = useState<GetHub | undefined>();
+  const [ufs, setUfs] = useState<string[]>([]);
+  const [cities, setCities] = useState<IBGECityResponse[]>([]);
+  const [selectedCityName, setSelectedCityName] = useState("");
+  const [selectedUf, setSelectedUf] = useState("");
 
   useEffect(() => {
     checkLogin();
   }, [checkLogin]);
 
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
+  const [name, setName] = useState("");
+
+  const [selectedFile, setSelectedFile] = useState<File>();
+
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
     0, 0,
   ]);
-
-  const [selectedFile, setSelectedFile] = useState<File>();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
 
       setInitialPosition([latitude, longitude]);
+      sharedCoordinates = [latitude, longitude];
     });
   }, []);
 
-  const [ufs, setUfs] = useState<string[]>([]);
-  const [cities, setCities] = useState<IBGECityResponse[]>([]);
-  const [selectedCityName, setSelectedCityName] = useState("");
-  const [selectedUf, setSelectedUf] = useState("");
+  useEffect(() => {
+    checkLogin();
+  }, [checkLogin]);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
-  const [number, setNumber] = useState("");
+  useEffect(() => {
+    async function searchHub() {
+      const response = await api.getHubById(hubId!);
 
-  function handleUpdate() {}
-  function handleDelete(): void {
+      setHub(response);
+    }
+
+    searchHub();
+
+    setName(hub?.nome!)
+    setEmail(hub?.email!)
+    setNumber(hub?.numero!)
+  }, [hub?.email, hub?.nome, hub?.numero, hubId]);
+
+  async function handleUpdateHub() {
+    if (!selectedCityName) {
+      toast.error("selecione uma cidade");
+      return;
+    }
+
+    if (!selectedUf) {
+      toast.error("selecione um estado");
+      return;
+    }
+
+    if (!name || name === "") {
+      setName(hub?.nome!);
+    }
+
+    if (!email || email === "") {
+      setEmail(hub?.email!);
+    }
+
+    if (!number || number === "") {
+      setNumber(hub?.numero!);
+    }
+
+    const request = {
+      cep: "45678543",
+      cidade: selectedCityName,
+      email: hub?.email!,
+      estado: hub?.estado!,
+      imagem: hub?.imagem!,
+      nome: hub?.nome!,
+      numero: hub?.numero!,
+      usuarioId: userId!,
+      idMateriais: materialTypes.map((m) => Number(m) + 1),
+      latitude: sharedCoordinates[0].toString(),
+      longitude: sharedCoordinates[1].toString(),
+    }
+
+    console.log(request);
+
+    await api
+      .updateExistingHub(
+        request,
+        hubId!
+      )
+      .then(() => {
+        navigate("/my-hubs", { replace: true });
+      })
+      .catch(() => {
+        toast.error("algum erro ocorreu ao atualizar seu Hub")
+      });
+  }
+
+  function handleDelete() {
     api.deleteExistingHub(String(hubId));
 
     navigate("/my-hubs");
@@ -111,7 +186,7 @@ export function UpdateHub() {
       </header>
 
       <form autoComplete="off">
-        <h1>[Nome aqui - ID {hubId}]</h1>
+        <h1>{hub?.nome}</h1>
 
         <Dropzone onFileUploaded={setSelectedFile} />
 
@@ -126,7 +201,7 @@ export function UpdateHub() {
               type="text"
               name="name"
               id="name"
-              value={name}
+              placeholder={hub?.nome}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -138,7 +213,7 @@ export function UpdateHub() {
                 type="email"
                 name="email"
                 id="email"
-                value={email}
+                placeholder={hub?.email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -148,8 +223,8 @@ export function UpdateHub() {
                 type="text"
                 name="whatsapp"
                 id="whatsapp"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
+                placeholder={hub?.numero}
+                onChange={(e) => setNumber(e.target.value)}
               />
             </div>
           </div>
@@ -162,21 +237,10 @@ export function UpdateHub() {
           </legend>
 
           <div className="map-container">
-            <Map />
+            <Map latitude={initialPosition[0]} longitude={initialPosition[1]} />
           </div>
 
           <div className="field-group">
-            <div className="field">
-              <label htmlFor="numero">Numero</label>
-              <input
-                type="text"
-                name="numero"
-                id="numero"
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
-              />
-            </div>
-
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
               <InputSelect
@@ -187,9 +251,7 @@ export function UpdateHub() {
                 }
               />
             </div>
-          </div>
 
-          <div className="field-group">
             <div className="field">
               <label htmlFor="city">Cidade</label>
               <InputSelect
@@ -219,8 +281,12 @@ export function UpdateHub() {
           </div>
         </fieldset>
 
-        <button id="form-button" type="button" onClick={() => handleUpdate()}>
-          Cadastrar ponto de coleta
+        <button
+          id="form-button"
+          type="button"
+          onClick={async () => await handleUpdateHub()}
+        >
+          Salvar ponto de coleta
         </button>
         <ButtonRed id="delete-button" onClick={() => handleDelete()}>
           Deletar ponto de coleta
@@ -230,19 +296,7 @@ export function UpdateHub() {
   );
 }
 
-function Map() {
-  const [initialPosition, setInitialPosition] = useState<[number, number]>([
-    0, 0,
-  ]);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-
-      setInitialPosition([latitude, longitude]);
-    });
-  }, []);
-
+function Map({ latitude, longitude }: { latitude: number; longitude: number }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
   });
@@ -251,7 +305,7 @@ function Map() {
     <>
       {isLoaded ? (
         <GoogleMap
-          center={{ lat: initialPosition[0], lng: initialPosition[1] }}
+          center={{ lat: latitude, lng: longitude }}
           zoom={17}
           mapContainerStyle={{
             width: "100%",
@@ -260,10 +314,10 @@ function Map() {
           }}
         >
           <MarkerF
-            position={{ lat: initialPosition[0], lng: initialPosition[1] }}
+            position={{ lat: latitude, lng: longitude }}
             draggable={true}
             onDragEnd={(e) =>
-              setInitialPosition([e.latLng!.lat(), e.latLng!.lng()])
+              (sharedCoordinates = [e.latLng!.lat(), e.latLng!.lng()])
             }
           />
         </GoogleMap>
