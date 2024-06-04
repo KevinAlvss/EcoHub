@@ -35,15 +35,19 @@ let sharedCoordinates = [0, 0];
 
 export function UpdateHub() {
   const { hubId } = useParams();
-  const navigate = useNavigate();
   const { checkLogin, userId } = useAuth();
   const { materialTypes } = useMaterial();
+  const navigate = useNavigate();
 
   const [hub, setHub] = useState<GetHub | undefined>();
   const [ufs, setUfs] = useState<string[]>([]);
   const [cities, setCities] = useState<IBGECityResponse[]>([]);
   const [selectedCityName, setSelectedCityName] = useState("");
   const [selectedUf, setSelectedUf] = useState("");
+
+  useEffect(() => {
+    checkLogin();
+  }, [checkLogin]);
 
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
@@ -132,6 +136,14 @@ export function UpdateHub() {
       .catch(() => {
         toast.error("algum erro ocorreu ao atualizar seu Hub")
       });
+  }
+
+  function handleDelete() {
+    api.deleteExistingHub(String(hubId));
+
+    navigate("/my-hubs");
+
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -276,7 +288,9 @@ export function UpdateHub() {
         >
           Salvar ponto de coleta
         </button>
-        <ButtonRed id="delete-button">Deletar ponto de coleta</ButtonRed>
+        <ButtonRed id="delete-button" onClick={() => handleDelete()}>
+          Deletar ponto de coleta
+        </ButtonRed>
       </form>
     </div>
   );
