@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/authContext";
 import { useEffect, useState } from "react";
 import { HubService } from "../../services/hub/HubService";
 import { GetHub } from "../../services/models/hub/HubModel";
+import hubImage from "../../images/hub-example.png";
 
 const api = new HubService();
 
@@ -73,7 +74,7 @@ function RenderHubs({ hubs, navigate }: { hubs: GetHub[], navigate: any }) {
         return (
           <Hub key={hub.id}>
             <div>
-              <img src={hub.imagem} alt="nomeDoHubAqui" />
+              <img src={hubImage} alt="nomeDoHubAqui" />
               <h1>{hub.nome}</h1>
               <p>{formattedMaterial}</p>
               <div>
