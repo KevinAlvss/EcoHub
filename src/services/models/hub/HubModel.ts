@@ -9,6 +9,8 @@ export interface AddOrUpdateHubRequest {
   cep: string;
   usuarioId: string;
   idMateriais: number[];
+  latitude: string;
+  longitude: string;
 }
 
 export interface GetHub {
