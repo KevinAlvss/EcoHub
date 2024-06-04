@@ -54,7 +54,6 @@ export function InspectHub() {
           <RouteContainer>
             <RouteTitle>Endereço</RouteTitle>
             <p>{hub?.estado} - {hub?.cidade}</p>
-            <p>Cep: {hub?.cep} - numero: {hub?.numero}</p>
             <p>{hub?.pontoReferencia}</p>
           </RouteContainer>
 
