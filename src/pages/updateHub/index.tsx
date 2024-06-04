@@ -45,10 +45,6 @@ export function UpdateHub() {
   const [selectedCityName, setSelectedCityName] = useState("");
   const [selectedUf, setSelectedUf] = useState("");
 
-  useEffect(() => {
-    checkLogin();
-  }, [checkLogin]);
-
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
